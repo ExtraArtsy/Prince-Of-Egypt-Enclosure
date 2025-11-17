@@ -1,29 +1,26 @@
 #include <Servo.h>
-Servo myservo;
 
-const int switchPin = 7;
-const int servoPin = 9;
-const int ledPin = 13:
-
-int switchState = 0;
-bool activated = false;
+Servo handServo;
+const int switchPin = 4;
+const int servoPos = 0;
+int handSwitchState = 0;
+int previousHandSwitchState = 90;
+bool servoTurned = false; 
 
 void setup() {
-  // put your setup code here, to run once:
-  pinMode(switchPin, INPUT_PULLUP);
-  pinMode(ledPin, OUTPUT);
-  myservo.attach(servoPin);
-  myservo.write(0);
-
+  handServo.attach(11);
+  pinMode(switchPin, INPUT);
+   handServo.write(0);
+  Serial.begin(9600);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  switchState = digitalRead(switchPin);
-  if(switchState == HIGH && !activated) {
-    myservo.write(90);
-    activated = true;
-    delay(1000);
+  handSwitchState = digitalRead(switchPin);
+  Serial.println(handSwitchState);
+  if(handSwitchState != previousHandSwitchState) {
+    if(handSwitchState == HIGH) {
+    handServo.write(90);
+    servoTurned = true;
+    }
   }
-
 }
