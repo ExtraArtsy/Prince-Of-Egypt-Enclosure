@@ -1,3 +1,11 @@
+// Black wires are for ground
+// Red wires are for power
+// Yellow wires are for servos
+// Green wires are for LEDs (LED wires go into the analog pins)
+// Blue wires are for switches
+
+// Code is ordered by the sequence of events in the enclosure
+
 #include <Servo.h>
 
 // For Sequence 1:
@@ -34,6 +42,7 @@ int seaSwitchState = 0;
 
 void setup() {
   // put your setup code here, to run once:
+  Serial.begin(9600); // For debugging
 
   // For Sequence 1:
   pinMode(ledPinRed, OUTPUT);
@@ -41,16 +50,17 @@ void setup() {
   pinMode(switchPin, INPUT);
 
   // For Sequence 2:
-  plagueServo1.attach(7);
-  plagueServo2.attach(8);
+  plagueServo1.attach(9) ;
+  plagueServo2.attach(10);
   pinMode(plagueSwitchPin, INPUT);
   plagueServo1.write(0);
   plagueServo2.write(0);
 
   // For Sequence 3:
-  handServo.attach(9);
+  handServo.attach(11);
   pinMode(handSwitchPin, INPUT);
   handServo.write(0);
+  Serial.println("Servo ready");
 
   // For Sequence 4:
   pinMode(redledPin, OUTPUT);
@@ -58,8 +68,8 @@ void setup() {
   pinMode(bedswitchPin, INPUT);
 
   // For Sequence 5:
-  seaServo1.attach(10);
-  seaServo2.attach(11);
+  seaServo1.attach(12);
+  seaServo2.attach(13);
   pinMode(seaSwitchPin, INPUT_PULLUP);
   seaServo1.write(0);
   seaServo2.write(180);
@@ -84,26 +94,24 @@ void loop() {
   // For Sequence 2:
   plagueSwitchState = digitalRead(plagueSwitchPin);
   // Coded so that the servos activate when the switch is no longer being pressed down on.
-  if(plagueSwitchState == HIGH) {
+  if(plagueSwitchState == LOW) {
     plagueServo1.write(0);
     plagueServo2.write(180);
-    delay(1000);
-    plagueServo1.write(90);
   }
   else {
     plagueServo1.write(180);
     plagueServo2.write(0);
   }
-  delay(50);
 
   // For Sequence 3:
   handSwitchState = digitalRead(handSwitchPin);
   Serial.println(handSwitchState);
   if(handSwitchState != previousHandSwitchState) {
     if(handSwitchState == HIGH) {
-    handServo.write(90);
-    servoTurned = true;
-    handFallen = true;
+      Serial.println("Switch activated");
+      handServo.write(90);
+      servoTurned = true;
+      handFallen = true;    // Sequence 4 cannot work properly until sequence 3 activates. The hand falling triggers the purple LED to activate.
     }
   }
 
