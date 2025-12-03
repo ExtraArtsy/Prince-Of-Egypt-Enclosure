@@ -4,7 +4,7 @@
 // Green wires are for LEDs (LED wires go into the analog pins)
 // Blue wires are for switches
 
-// Code is ordered by the sequence of events in the enclosure
+// Code is ordered by the sequence of events in the enclosure.
 
 #include <Servo.h>
 
@@ -60,7 +60,6 @@ void setup() {
   handServo.attach(11);
   pinMode(handSwitchPin, INPUT);
   handServo.write(0);
-  Serial.println("Servo ready");
 
   // For Sequence 4:
   pinMode(redledPin, OUTPUT);
@@ -95,12 +94,12 @@ void loop() {
   plagueSwitchState = digitalRead(plagueSwitchPin);
   // Coded so that the servos activate when the switch is no longer being pressed down on.
   if(plagueSwitchState == LOW) {
-    plagueServo1.write(0);
+    plagueServo1.write(120);
     plagueServo2.write(180);
   }
   else {
-    plagueServo1.write(180);
-    plagueServo2.write(0);
+    plagueServo1.write(0);
+    plagueServo2.write(110);
   }
 
   // For Sequence 3:
@@ -137,8 +136,8 @@ void loop() {
     seaServo2.write(90);
   }
   else {
-    seaServo1.write(0);
-    seaServo2.write(180);
+    seaServo1.write(180);
+    seaServo2.write(0);
   }
   delay(50);
 
